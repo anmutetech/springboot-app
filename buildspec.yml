@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl -L https://github.com/aquasecurity/trivy/releases/download/v0.12.0/trivy_0.12.0_Linux-64bit.tar.gz | tar xz
+  build:
+    commands:
+      - echo "Starting Trivy scan..."
+      - trivy image --exit-code 1 mavenapp:latest
+      - trivy report --severity CRITICAL --format json > trivy.json
+      - echo "Trivy scan complete"
+
+artifacts:
+  files:
+    - trivy.json
